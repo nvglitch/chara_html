@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>角色视差遮挡 Demo（已更新）</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      height: 100vh;
+      overflow: hidden;
+      background-color: #7b036f;
+      font-family: "Microsoft YaHei", sans-serif;
+    }
+
+    .scene {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      perspective: 1000px; /* 加点景深 */
+      cursor: default;
+    }
+
+    /* 背景层 */
+    .bg {
+      position: absolute;
+      inset: 0;
+      background: url('./bg.jpg') center/cover no-repeat;
+      z-index: 0;
+      transform: scale(1.1);
+      transition: transform 0.3s ease;
+    }
+
+    /* 角色层 */
+    .character {
+      position: absolute;
+      bottom: -90%;
+      right: 58%;
+      width: 40%;
+      z-index: 20;
+      pointer-events: none;
+      transition: transform 0.2s ease;
+    }
+
+    /* --- 新增：艺术字 SVG --- */
+    .art-text {
+      position: absolute;
+      /* 你需要根据你的艺术字SVG调整这些值 */
+      bottom: 50%;
+      right: 15%;
+      width: 40%; /* 示例宽度，请调整 */
+      z-index: 21; /* 在角色之上，按钮之下 */
+      pointer-events: none;
+      transition: transform 0.2s ease; /* 跟随角色一起动 */
+    }
+
+    /* 前景按钮层 */
+    .cta {
+      position: absolute;
+      bottom: 15%;
+      right: 15%;
+      z-index: 30;
+    }
+
+    /* --- 修改：注释掉旧的按钮样式 --- */
+    /*
+    .cta button {
+      background: linear-gradient(90deg, #d9baff, #ffd1f7);
+      border: none;
+      padding: 36px 80px;
+      font-size: 40px;
+      color: #ab61ff;
+      font-weight: bold;
+      border-radius: 20px;
+      box-shadow: 0 0 0px rgba(228, 213, 255, 0.6);
+      cursor: pointer;
+      transition: transform 0.1s ease, box-shadow 0.2s ease;
+    }
+
+    .cta button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(228, 213, 255, 0.6);
+    }
+    */
+
+    /* --- 新增：SVG 按钮的样式 --- */
+    .cta a {
+      /* 使用 <a> 标签包裹 SVG，使其可点击 */
+      display: inline-block; /* 保证变换效果正常 */
+      text-decoration: none;
+    }
+
+    .cta-svg-button {
+      /* 你需要根据你的SVG按钮调整宽度 */
+      width: 400px; /* 示例宽度，请调整 */
+      height: auto;
+      cursor: pointer;
+      transition: transform 0.1s ease, filter 0.2s ease;
+    }
+
+    .cta-svg-button:hover {
+      transform: scale(1.2);
+      /* 对于 SVG，使用 filter: drop-shadow() 效果比 box-shadow 更好，
+        它会沿着 SVG 的实际形状产生阴影，而不是一个矩形框。
+      */
+      filter: drop-shadow(0 0 25px rgba(228, 213, 255, 0.6));
+    }
+
+
+    /* 轻微的光效装饰层（角色后） */
+    .light {
+      position: absolute;
+      bottom: 0;
+      right: 15%;
+      width: 45%;
+      height: 70%;
+      background: radial-gradient(circle at 50% 60%, rgba(228, 213, 255, 0.6), transparent 70%);
+      z-index: 10;
+      filter: blur(40px);
+    }
+
+    /* 鼠标点特效 */
+    .cursor-dot {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      background: #ffcc00;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 100;
+      transform: translate(-50%, -50%);
+      transition: transform 0.05s linear;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="scene">
+    <div class="bg"></div>
+    <div class="light"></div>
+
+    <img class="character" src="chara.png" alt="角色" />
+
+    <img class="art-text" src="art-text.svg" alt="艺术字" />
+
+
+    <div class="cta">
+      <a href="https://mzh.moegirl.org.cn/%E6%97%A5%E9%87%8E%E6%A3%AE%E9%9B%AB" aria-label="立即预约">
+        <img src="cta-button.svg" alt="立即预约按钮" class="cta-svg-button" />
+      </a>
+    </div>
+  </div>
+
+  <div class="cursor-dot" id="cursor"></div>
+
+  <script>
+    const scene = document.querySelector('.scene');
+    const bg = document.querySelector('.bg');
+    const char = document.querySelector('.character');
+    const cursor = document.querySelector('#cursor');
+    
+    // --- 新增：获取艺术字元素 ---
+    const artText = document.querySelector('.art-text');
+
+    scene.addEventListener('mousemove', (e) => {
+      const x = (window.innerWidth / 2 - e.pageX) / 50;
+      const y = (window.innerHeight / 2 - e.pageY) / 50;
+
+      // 背景轻微反方向移动（视差）
+      bg.style.transform = `translate(${x / 2}px, ${y / 2}px) scale(1.1)`;
+
+      // 角色轻微跟随
+      char.style.transform = `translate(${x}px, ${y}px)`;
+
+      // --- 新增：让艺术字也跟随移动 ---
+      // (和角色移动幅度一样，看起来像贴在一起)
+      artText.style.transform = `translate(${x}px, ${y}px)`;
+
+      // 光标跟随
+      cursor.style.transform = `translate(${e.pageX}px, ${e.pageY}px)`;
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_图层_1" data-name="图层 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 411 137">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+        font-family: MOBO-90ms-RKSJ-H, MOBO;
+        font-size: 59.7px;
+      }
+
+      .cls-2 {
+        fill: #f3a1b0;
+        stroke: #ffe7c5;
+        stroke-miterlimit: 10;
+        stroke-width: 7px;
+      }
+    </style>
+  </defs>
+  <rect class="cls-2" x="3.5" y="3.5" width="404" height="130" rx="65" ry="65"/>
+  <text class="cls-1" transform="translate(48.29 91.41)"><tspan x="0" y="0">Click here</tspan></text>
+</svg>
