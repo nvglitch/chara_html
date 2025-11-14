@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>角色视差遮挡 Demo（已更新）</title>
+  <title>角色视差遮挡 Demo</title>
   <style>
     * {
       margin: 0;
@@ -51,9 +51,9 @@
     .art-text {
       position: absolute;
       /* 你需要根据你的艺术字SVG调整这些值 */
-      bottom: 50%;
-      right: 15%;
-      width: 40%; /* 示例宽度，请调整 */
+      bottom: 40%;
+      right: 11%;
+      width: 50%; /* 示例宽度，请调整 */
       z-index: 21; /* 在角色之上，按钮之下 */
       pointer-events: none;
       transition: transform 0.2s ease; /* 跟随角色一起动 */
@@ -62,31 +62,10 @@
     /* 前景按钮层 */
     .cta {
       position: absolute;
-      bottom: 15%;
-      right: 15%;
+      bottom: 12%;
+      right: 25%;
       z-index: 30;
     }
-
-    /* --- 修改：注释掉旧的按钮样式 --- */
-    /*
-    .cta button {
-      background: linear-gradient(90deg, #d9baff, #ffd1f7);
-      border: none;
-      padding: 36px 80px;
-      font-size: 40px;
-      color: #ab61ff;
-      font-weight: bold;
-      border-radius: 20px;
-      box-shadow: 0 0 0px rgba(228, 213, 255, 0.6);
-      cursor: pointer;
-      transition: transform 0.1s ease, box-shadow 0.2s ease;
-    }
-
-    .cta button:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 25px rgba(228, 213, 255, 0.6);
-    }
-    */
 
     /* --- 新增：SVG 按钮的样式 --- */
     .cta a {
